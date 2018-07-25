@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ==== #11. mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- ==== #12. 루트 엘리먼트 & 네임스페이스 설정(프로젝트 전체내에서 유일해야 한다.) ==== -->
+<mapper namespace="trantestanno">
+
+	<select id="getLoginUserPoint" parameterType="String" resultType="int">
+		select point
+		from tx_member
+		where id = #{loginid}
+	</select>
+	
+	
+	<insert id="insert_tx_notices" parameterType="com.spring.trantestanno.model.NoticeVO">
+	    insert into tx_notices(seq, writerid, title, content)
+	    values(seq_tx_notices.nextval, #{writerid}, #{title}, #{content} )
+	</insert>
+	
+	<update id="update_tx_member" parameterType="String">
+		update tx_member set point = point + 1 
+		where id = #{writerid}
+	</update>
+	
+	
+	<resultMap type="HashMap" id="noticeMap">
+		<result property="SEQ"      column="seq"      javaType="String" />
+		<result property="NAME"     column="name"     javaType="String" />
+		<result property="TITLE"    column="title"    javaType="String" />
+		<result property="CONTENT"  column="content"  javaType="String" />
+	</resultMap>
+	
+	<select id="list" resultMap="noticeMap">
+	    select seq, name, title, content 
+		from tx_notices N join tx_member M
+		on N.writerid = M.id 
+	    order by seq desc
+	</select>
+	
+	
+</mapper>
+ 
+ 
